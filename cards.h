@@ -63,10 +63,14 @@ public:
 	// A vector of Cards
 	Hand();
 
-	// You decide what functions you'll need...
+	//takes in a card from the drawCard function from the player class, and adds it to the hand
+	//drawCard will take care of increasing the player's current value.
+	void addCard(const Card&);
 
 private:
-	// You decide what fields you'll need...
+	std::vector<Card> cards;
+	//counts all card values and stores them as a single value
+	int cardCount;
 };
 
 
@@ -76,11 +80,28 @@ public:
 	//    Assigns initial amount of money
 	Player(int m);
 
-	// You decide what functions you'll need...
+	//mutator
+	void setMoney(int);
+
+	//takes in a card from the deck, and increases the player's card count
+	Card& drawCard(const Card&);
+
+	//for nondealer players, this will write game stats to the txt file
+	void recordRound();
+
+	//for nondealer players, this will determine if the player has won 1000 pesos/dollars
+	bool determineWin();
 
 private:
+	//money will be set to -1 to denote that a player is the dealer
+	//a normal player should not be able to reach negative money
 	int money;
-	// You decide what extra fields (if any) you'll need...
+	//this one will store a Hand object, which will hold the player's cards
+	Hand cardHand;
 };
+
+//an outside function, which determines who won the individual round
+//will increase or decrease player's amount of money to match
+void whoWonRound();
 
 #endif

@@ -188,11 +188,32 @@ bool Card::operator < (Card card2) const {
 /* *************************************************
 Hand class
 ************************************************* */
-// Implemente the member functions of the Hand class here.
+
+//the default constructor; just default initialize both member variables
+Hand::Hand() : cards(), cardCount(0){}
+
+//the addCard function
+void Hand::addCard(const Card& c){
+	if (cards.size() == 0)
+		cards.push_back(c);
+
+	//if other cards exist, search for where the card goes by iterating through the cards one by one
+	else{
+		vector<Card>::iterator curr = cards.begin();
+		while (curr->get_rank() < c.get_rank()){
+			++curr;//increase curr to the next spot
+		}
+		//at this point, the curr card is either greater than or equal to the card to be added
+		cards.insert(curr, c);//inserts c before the index of curr
+	}
+
+	//after the card is added (no matter the case), add the cards value
+	cardCount += c.get_rank();
+}
 
 
 
 /* *************************************************
 Player class
 ************************************************* */
-// Implemente the member functions of the Player class here.
+//to do: constructor(int), setMoney(int), drawCard(const Card&), recordRound, determineWin
