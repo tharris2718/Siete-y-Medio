@@ -1,6 +1,7 @@
 #include "cards.h"
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 
 /*
 You might or might not need these two extra libraries
@@ -211,9 +212,58 @@ void Hand::addCard(const Card& c){
 	cardCount += c.get_rank();
 }
 
+void Hand::printCards(ofstream& ifs) const{
+	for (Card c : cards){
+		ifs << "     ";//five spaces for indentation
+		ifs << setw(15) << left << c.get_spanish_rank() << " de " << c.get_spanish_suit;
+		ifs << "(" << c.get_english_rank() << " of " << c.get_english_suit << ").\n";
+	}
+}
+
+unsigned Hand::getCardCount() const{
+	return cardCount;
+}
+
 
 
 /* *************************************************
 Player class
 ************************************************* */
-//to do: constructor(int), setMoney(int), drawCard(const Card&), recordRound, determineWin
+//the constructor, accepting one param, the initial value of money
+
+//100 for a regular player, -1 for the dealer
+Player::Player(int m) : money(m), cardHand(){}
+
+
+//changeMoney is a shortcut past the two alternatives: giveMoney and takeMoney
+//in the case of decreasing money, the end value shouldn't be negative, because main() will handle proper betting
+void Player::changeMoney(int nm){
+	money += nm;
+}
+
+//param ifs is the file stream to write to, r is the round number, and
+//b is the amount bet for the round
+void Player::recordRound(ofstream& ifs, int r, int b){
+	//if called on the normal player, print out the start of the round record
+	if (money >= 0){
+		//print out a full line of dashes
+		for (unsigned i = 0; i < 40; ++i)
+			ifs << "-";
+		ifs << endl << endl << setw(20) << left << "\nGame number: 1" << r;
+		ifs << "Money left: $" << money << endl;
+		ifs << "Bet: " << b << endl << endl;
+	}
+
+	//now for "Your/Dealer's cards", then printing out the hand, and card point total
+	(money >= 0) ? (ifs << "Your ") : (ifs << "Dealer's ");
+	ifs << "cards:\n";
+	cardHand.printCards(ifs);
+	(money >= 0) ? (ifs << "Your ") : (ifs << "Dealer's ");
+	ifs << "total is " << cardHand.getCardCount() << ".\n\n";
+	//the stream is now ready for writing by another player
+}
+
+//does not necessarily determine who won the game, but rather if a player is eligible to win
+bool Player::determineWin() const{
+	return (cardHand.getCardCount() <= 7.5);
+}

@@ -63,14 +63,19 @@ public:
 	// A vector of Cards
 	Hand();
 
-	//takes in a card from the drawCard function from the player class, and adds it to the hand
-	//drawCard will take care of increasing the player's current value.
+	//takes in a card and adds it to the hand, increasing the player's card points
 	void addCard(const Card&);
+
+	//prints the cards to a stream
+	void printCards(ofstream&) const;
+
+	//returns the card count
+	unsigned getCardCount() const;
 
 private:
 	std::vector<Card> cards;
 	//counts all card values and stores them as a single value
-	int cardCount;
+	double cardCount;
 };
 
 
@@ -81,16 +86,13 @@ public:
 	Player(int m);
 
 	//mutator
-	void setMoney(int);
+	void changeMoney(int);
 
-	//takes in a card from the deck, and increases the player's card count
-	Card& drawCard(const Card&);
-
-	//for nondealer players, this will write game stats to the txt file
-	void recordRound();
+	//for nondealer players, this will write game stats to the txt file given as the first param
+	void recordRound(ofstream&, int, int);
 
 	//for nondealer players, this will determine if the player has won 1000 pesos/dollars
-	bool determineWin();
+	bool determineWin() const;
 
 private:
 	//money will be set to -1 to denote that a player is the dealer
