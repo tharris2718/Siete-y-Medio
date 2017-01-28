@@ -209,10 +209,14 @@ void Hand::addCard(const Card& c){
 	}
 
 	//after the card is added (no matter the case), add the cards value
-	cardCount += c.get_rank();
+	if (c.get_rank <= 7)
+		cardCount += c.get_rank();
+
+	else
+		cardCount += 0.5;
 }
 
-void Hand::printCards(ofstream& ifs) const{
+void Hand::printCards(ostream& ifs) const{
 	for (Card c : cards){
 		ifs << "     ";//five spaces for indentation
 		ifs << setw(15) << left << c.get_spanish_rank() << " de " << c.get_spanish_suit;
@@ -220,7 +224,7 @@ void Hand::printCards(ofstream& ifs) const{
 	}
 }
 
-unsigned Hand::getCardCount() const{
+double Hand::getCardCount() const{
 	return cardCount;
 }
 
@@ -242,7 +246,7 @@ void Player::changeMoney(int nm){
 }
 
 //param ifs is the file stream to write to, r is the round number, and
-//b is the amount bet for the round
+//b is the amount bet for the round, only necessary for a nondealer
 void Player::recordRound(ofstream& ifs, int r, int b){
 	//if called on the normal player, print out the start of the round record
 	if (money >= 0){
@@ -263,7 +267,12 @@ void Player::recordRound(ofstream& ifs, int r, int b){
 	//the stream is now ready for writing by another player
 }
 
+void Player::resetHand(){
+	cardHand = Hand();
+}
+
 //does not necessarily determine who won the game, but rather if a player is eligible to win
 bool Player::determineWin() const{
 	return (cardHand.getCardCount() <= 7.5);
 }
+
