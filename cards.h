@@ -66,11 +66,11 @@ public:
 	//takes in a card and adds it to the hand, increasing the player's card points
 	void addCard(const Card&);
 
-	//prints the cards to a stream
-	void printCards(ofstream&) const;
+	//prints the cards to a stream, either cout or the game log file
+	void printCards(ostream&) const;
 
 	//returns the card count
-	unsigned getCardCount() const;
+	double getCardCount() const;
 
 private:
 	std::vector<Card> cards;
@@ -88,6 +88,13 @@ public:
 	//mutator
 	void changeMoney(int);
 
+	int getMoney() const{ return money; }
+
+	Hand getHand() const{ return cardHand; }
+
+	//empties the hand for a new round
+	void resetHand();
+
 	//for nondealer players, this will write game stats to the txt file given as the first param
 	void recordRound(ofstream&, int, int);
 
@@ -97,13 +104,12 @@ public:
 private:
 	//money will be set to -1 to denote that a player is the dealer
 	//a normal player should not be able to reach negative money
+	//later on, for the whoWonRound function, a return of Player(-100) will indicate a tie
 	int money;
 	//this one will store a Hand object, which will hold the player's cards
 	Hand cardHand;
 };
 
-//an outside function, which determines who won the individual round
-//will increase or decrease player's amount of money to match
-void whoWonRound();
+
 
 #endif
