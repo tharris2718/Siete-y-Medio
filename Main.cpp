@@ -15,7 +15,7 @@ int main(){
 	Player dealer(-1);
 	
 	//greet
-	cout << "Welcome to a friendly game of Monopoly. You have started the game with 100 pesos.\n";
+	cout << "Welcome to a friendly game of Siete y Medio. You have started the game with 100 pesos.\n";
 	int round = 1;//round number
 
 	ofstream gamelog("gamelog.txt");
